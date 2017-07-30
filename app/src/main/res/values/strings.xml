@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Momento</string>
+    <string name="moment_title_hint">Input title</string>
+    <string name="moment_title_label">Title</string>
+    <string name="moment_details_label">Details</string>
+    <string name="moment_is_favorite_label">Favorite</string>
+</resources>
