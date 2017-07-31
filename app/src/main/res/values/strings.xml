@@ -4,4 +4,7 @@
     <string name="moment_title_label">Title</string>
     <string name="moment_details_label">Details</string>
     <string name="moment_is_favorite_label">Favorite</string>
+    <string name="date_picker_title">Date of moment:</string>
+    <string name="moment_update_date">Update date</string>
+    <string name="moment_update_time">Update time</string>
 </resources>
