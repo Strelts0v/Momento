@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.activities.MomentActivity"
+        <activity
+            android:name=".controller.activities.MomentPagerActivity"
             android:label="@string/app_name">
         </activity>
     </application>

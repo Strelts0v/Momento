@@ -11,21 +11,25 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:padding="4dp"
-        android:textColorLink="?android:attr/colorMultiSelectHighlight"/>
+        android:textColorLink="@android:color/holo_orange_dark"/>
+
     <TextView
         android:id="@+id/list_item_moment_title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/list_item_moment_is_favorite_check_box"
-        android:textStyle="bold"
         android:padding="4dp"
+        android:textColorLink="@android:color/holo_orange_dark"
+        android:textStyle="bold"
         tools:text="Moment title"/>
+
     <TextView
         android:id="@+id/list_item_moment_date_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/list_item_moment_is_favorite_check_box"
         android:layout_below="@id/list_item_moment_title_text_view"
+        android:layout_toLeftOf="@id/list_item_moment_is_favorite_check_box"
         android:padding="4dp"
+        android:textColorLink="@android:color/holo_orange_dark"
         tools:text="Moment Date"/>
 </RelativeLayout>

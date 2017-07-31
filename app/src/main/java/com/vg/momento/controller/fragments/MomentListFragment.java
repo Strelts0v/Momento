@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import com.vg.momento.R;
-import com.vg.momento.controller.activities.MomentActivity;
+import com.vg.momento.controller.activities.MomentPagerActivity;
 import com.vg.momento.dao.implementations.EmbeddedMomentDao;
 import com.vg.momento.dao.interfaces.MomentDao;
 import com.vg.momento.model.Moment;
@@ -24,10 +24,6 @@ public class MomentListFragment extends Fragment {
     private MomentAdapter mAdapter;
 
     private MomentDao mMomentDao;
-
-    private static final int REQUEST_CODE_MOMENT = 1;
-
-    private static final String KEY_LAST_UPDATED_MOMENT_POSITION = "last_updated_moment";
 
     public static MomentListFragment newInstance() {
         // Initializing of bundle for fragment
@@ -64,9 +60,7 @@ public class MomentListFragment extends Fragment {
             mAdapter = new MomentAdapter(moments);
             mMomentRecycleView.setAdapter(mAdapter);
         } else {
-            // update only item that could be updated
-            int position = getArguments().getInt(KEY_LAST_UPDATED_MOMENT_POSITION, 0);
-            mAdapter.notifyItemChanged(position);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -74,13 +68,6 @@ public class MomentListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_MOMENT) {
-            // Обработка результата
-        }
     }
 
     private class MomentHolder extends RecyclerView.ViewHolder
@@ -116,12 +103,8 @@ public class MomentListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = MomentActivity.newIntent(getActivity(), mMoment.getId());
-            if(mAdapter != null) {
-                getArguments().putInt(KEY_LAST_UPDATED_MOMENT_POSITION,
-                        mAdapter.mMoments.indexOf(mMoment));
-            }
-            startActivityForResult(intent, REQUEST_CODE_MOMENT);
+            Intent intent = MomentPagerActivity.newIntent(getActivity(), mMoment.getId());
+            startActivity(intent);
         }
     }
 
