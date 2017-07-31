@@ -1,8 +1,12 @@
 package com.vg.momento.controller.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,7 +19,7 @@ import android.widget.EditText;
 import com.vg.momento.R;
 import com.vg.momento.dao.implementations.EmbeddedMomentDao;
 import com.vg.momento.model.Moment;
-
+import java.util.Date;
 import java.util.UUID;
 
 public class MomentFragment extends Fragment{
@@ -24,11 +28,21 @@ public class MomentFragment extends Fragment{
 
     private EditText mEditText;
 
+    private Button mDateDisplayButton;
+
     private Button mDateButton;
+
+    private Button mTimeButton;
 
     private CheckBox mIsFavoriteCheckBox;
 
     private static final String ARG_MOMENT_ID = "moment_id";
+
+    private static final String DIALOG_DATE = "DialogDate";
+
+    private static final String DIALOG_TIME = "DialogTime";
+
+    private static final int REQUEST_CODE_DATE = 0;
 
     public static MomentFragment newInstance(UUID momentId) {
         // initialize bundle with arguments for MomentFragment
@@ -74,9 +88,31 @@ public class MomentFragment extends Fragment{
             }
         });
 
+        mDateDisplayButton = (Button) v.findViewById(R.id.moment_display_date);
+        mDateDisplayButton.setEnabled(false);
+        updateDate();
+
         mDateButton = (Button) v.findViewById(R.id.moment_date);
-        mDateButton.setText(mMoment.getDate().toLocaleString());
-        mDateButton.setEnabled(false);
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mMoment.getDate());
+                dialog.setTargetFragment(MomentFragment.this, REQUEST_CODE_DATE);
+                dialog.show(manager, DIALOG_DATE);
+            }
+        });
+
+        mTimeButton = (Button) v.findViewById(R.id.moment_time);
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(mMoment.getDate());
+                dialog.setTargetFragment(MomentFragment.this, REQUEST_CODE_DATE);
+                dialog.show(manager, DIALOG_TIME);
+            }
+        });
 
         mIsFavoriteCheckBox = (CheckBox) v.findViewById(R.id.moment_is_favorite);
         mIsFavoriteCheckBox.setChecked(mMoment.isFavorite());
@@ -90,7 +126,20 @@ public class MomentFragment extends Fragment{
         return v;
     }
 
-    public void returnResult() {
-        getActivity().setResult(Activity.RESULT_OK, null);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_CODE_DATE) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mMoment.setDate(date);
+            updateDate();
+        }
+    }
+
+    private void updateDate() {
+        mDateDisplayButton.setText(mMoment.getDate().toLocaleString());
     }
 }
+
