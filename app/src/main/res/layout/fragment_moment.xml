@@ -3,34 +3,68 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <TextView
+        style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/moment_title_label"
-        style="?android:listSeparatorTextViewStyle" />
+        android:textColorLink="@android:color/holo_orange_dark"/>
+
     <EditText
         android:id="@+id/moment_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/moment_title_hint"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:hint="@string/moment_title_hint"
+        android:textColorLink="@android:color/holo_orange_dark"/>
+
     <TextView
+        style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/moment_details_label"
-        style="?android:listSeparatorTextViewStyle" />
+        android:textColorLink="@android:color/holo_orange_dark"/>
+
     <Button
-        android:id="@+id/moment_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/moment_display_date"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/moment_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="0.5"
+            android:text="@string/moment_update_date"/>
+
+        <Button
+            android:id="@+id/moment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="0.5"
+            android:text="@string/moment_update_time"/>
+
+    </LinearLayout>
+
     <CheckBox
         android:id="@+id/moment_is_favorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/moment_is_favorite_label" />
+        android:text="@string/moment_is_favorite_label"
+        android:textColorLink="@android:color/holo_orange_dark"/>
 </LinearLayout>
