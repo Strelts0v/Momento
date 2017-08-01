@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import com.vg.momento.R;
 import com.vg.momento.controller.fragments.MomentFragment;
 import com.vg.momento.dao.implementations.EmbeddedMomentDao;
@@ -15,7 +15,7 @@ import com.vg.momento.model.Moment;
 import java.util.List;
 import java.util.UUID;
 
-public class MomentPagerActivity extends FragmentActivity{
+public class MomentPagerActivity extends AppCompatActivity{
 
     private ViewPager mViewPager;
 
