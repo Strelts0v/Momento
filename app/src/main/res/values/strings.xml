@@ -7,4 +7,15 @@
     <string name="date_picker_title">Date of moment:</string>
     <string name="moment_update_date">Update date</string>
     <string name="moment_update_time">Update time</string>
+    <string name="new_moment">New moment</string>
+    <string name="show_subtitle">Show subtitle</string>
+    <string name="hide_subtitle">Hide subtitle</string>
+    <string name="subtitle_format">%1$s moments</string>
+    <string name="moment_actions_title">Choose action:</string>
+    <string name="save_moment_button_text">Save</string>
+
+    <string-array name="moment_action_list">
+        <item>Delete</item>
+        <item>Update</item>
+    </string-array>
 </resources>
