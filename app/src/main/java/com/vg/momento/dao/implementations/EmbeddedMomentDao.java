@@ -14,7 +14,7 @@ public class EmbeddedMomentDao implements MomentDao {
 
     private Map<UUID, Moment> mMomentsMap;
 
-    private final static int INITIAL_SIZE = 30;
+    private final static int INITIAL_SIZE = 5;
 
     private EmbeddedMomentDao(){
         mMomentsMap = new LinkedHashMap<>(INITIAL_SIZE);
