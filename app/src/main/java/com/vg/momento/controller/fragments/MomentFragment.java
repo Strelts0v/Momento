@@ -2,8 +2,6 @@ package com.vg.momento.controller.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,6 +33,8 @@ public class MomentFragment extends Fragment{
     private Button mTimeButton;
 
     private CheckBox mIsFavoriteCheckBox;
+
+    private Button mSaveButton;
 
     private static final String ARG_MOMENT_ID = "moment_id";
 
@@ -120,6 +120,14 @@ public class MomentFragment extends Fragment{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mMoment.setFavorite(isChecked);
+            }
+        });
+
+        mSaveButton = (Button) v.findViewById(R.id.save_moment_button);
+        mSaveButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
             }
         });
 
