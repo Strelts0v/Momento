@@ -18,6 +18,15 @@ public class Moment {
     public Moment() {
         mId = UUID.randomUUID();
         mDate = new Date();
+        mTitle = "";
+        mIsFavorite = false;
+    }
+
+    public Moment(UUID id){
+        mId = id;
+        mDate = new Date();
+        mTitle = "";
+        mIsFavorite = false;
     }
 
     public UUID getId() {
