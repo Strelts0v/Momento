@@ -10,7 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import com.vg.momento.R;
 import com.vg.momento.controller.fragments.MomentFragment;
-import com.vg.momento.dao.implementations.EmbeddedMomentDao;
+import com.vg.momento.dao.implementations.SQLiteMomentDao;
 import com.vg.momento.model.Moment;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +35,7 @@ public class MomentPagerActivity extends AppCompatActivity{
         setContentView(R.layout.activity_moment_pager);
 
         mViewPager = (ViewPager) findViewById(R.id.activity_moment_pager_view_pager);
-        mMoments = EmbeddedMomentDao.getInstance().getAllMoments();
+        mMoments = SQLiteMomentDao.getInstance(MomentPagerActivity.this).getAllMoments();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
 
