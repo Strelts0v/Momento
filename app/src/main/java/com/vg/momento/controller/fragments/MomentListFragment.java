@@ -18,7 +18,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import com.vg.momento.R;
 import com.vg.momento.controller.activities.MomentPagerActivity;
-import com.vg.momento.dao.implementations.EmbeddedMomentDao;
+import com.vg.momento.dao.implementations.SQLiteMomentDao;
 import com.vg.momento.dao.interfaces.MomentDao;
 import com.vg.momento.model.Moment;
 import java.util.List;
@@ -63,7 +63,7 @@ public class MomentListFragment extends Fragment {
         mMomentRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Initialize MomentDao object
-        mMomentDao = EmbeddedMomentDao.getInstance();
+        mMomentDao = SQLiteMomentDao.getInstance(getActivity());
 
         // save state of subtitle visibility for cases, when user rotate phone
         if (savedInstanceState != null) {

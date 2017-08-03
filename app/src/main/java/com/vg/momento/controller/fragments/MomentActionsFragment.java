@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.vg.momento.R;
 import com.vg.momento.controller.activities.MomentPagerActivity;
 import com.vg.momento.dao.implementations.EmbeddedMomentDao;
+import com.vg.momento.dao.implementations.SQLiteMomentDao;
 import com.vg.momento.dao.interfaces.MomentDao;
 import java.util.UUID;
 
@@ -44,7 +45,7 @@ public class MomentActionsFragment extends DialogFragment{
         mMomentId = (UUID) getArguments().getSerializable(ARG_MOMENT_ID);
 
         // init of MomentDao
-        mMomentDao = EmbeddedMomentDao.getInstance();
+        mMomentDao = SQLiteMomentDao.getInstance(getActivity());
 
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_moment_actions, null);

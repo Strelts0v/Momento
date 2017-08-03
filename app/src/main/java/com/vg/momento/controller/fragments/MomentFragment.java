@@ -15,7 +15,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import com.vg.momento.R;
-import com.vg.momento.dao.implementations.EmbeddedMomentDao;
+import com.vg.momento.dao.implementations.SQLiteMomentDao;
+import com.vg.momento.dao.interfaces.MomentDao;
 import com.vg.momento.model.Moment;
 import java.util.Date;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class MomentFragment extends Fragment{
 
     private Moment mMoment;
 
-    private EditText mEditText;
+    private EditText mTitleEditText;
 
     private Button mDateDisplayButton;
 
@@ -35,6 +36,8 @@ public class MomentFragment extends Fragment{
     private CheckBox mIsFavoriteCheckBox;
 
     private Button mSaveButton;
+
+    private MomentDao mMomentDao;
 
     private static final String ARG_MOMENT_ID = "moment_id";
 
@@ -59,7 +62,7 @@ public class MomentFragment extends Fragment{
         super.onCreate(savedInstanceState);
 
         UUID id = (UUID) getArguments().getSerializable(ARG_MOMENT_ID);
-        mMoment = EmbeddedMomentDao.getInstance().getMoment(id);
+        mMoment = SQLiteMomentDao.getInstance(getActivity()).getMoment(id);
     }
 
     @Override
@@ -67,9 +70,9 @@ public class MomentFragment extends Fragment{
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_moment, container, false);
 
-        mEditText = (EditText) v.findViewById(R.id.moment_title);
-        mEditText.setText(mMoment.getTitle());
-        mEditText.addTextChangedListener(new TextWatcher() {
+        mTitleEditText = (EditText) v.findViewById(R.id.moment_title);
+        mTitleEditText.setText(mMoment.getTitle());
+        mTitleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence c, int start,
                                           int count, int after) {
@@ -123,10 +126,13 @@ public class MomentFragment extends Fragment{
             }
         });
 
+        mMomentDao = SQLiteMomentDao.getInstance(getActivity());
+
         mSaveButton = (Button) v.findViewById(R.id.save_moment_button);
         mSaveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                mMomentDao.updateMoment(mMoment.getId(), mMoment);
                 getActivity().onBackPressed();
             }
         });
