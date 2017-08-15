@@ -13,6 +13,18 @@
     <string name="subtitle_format">%1$s moments</string>
     <string name="moment_actions_title">Choose action:</string>
     <string name="save_moment_button_text">Save</string>
+    <string name="moment_choose_people_title">Choose people</string>
+    <string name="moment_send_report_title">Send report</string>
+
+    <string name="moment_report">%1$s!
+        The moment was on %2$s. %3$s, and %4$s
+    </string>
+    <string name="moment_report_favorite">The case is favorite</string>
+    <string name="moment_report_not_favorite">The case is not favorite</string>
+    <string name="moment_report_no_people">there is no people.</string>
+    <string name="moment_report_people">the people: %s.</string>
+    <string name="moment_report_subject">Moment Report</string>
+    <string name="send_report">Send moment report via</string>
 
     <string-array name="moment_action_list">
         <item>Delete</item>
