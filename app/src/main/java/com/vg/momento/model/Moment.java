@@ -2,6 +2,8 @@ package com.vg.momento.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,11 +17,14 @@ public class Moment {
 
     private boolean mIsFavorite;
 
+    private String mPeople;
+
     public Moment() {
         mId = UUID.randomUUID();
         mDate = new Date();
         mTitle = "";
         mIsFavorite = false;
+        mPeople = "";
     }
 
     public Moment(UUID id){
@@ -27,6 +32,7 @@ public class Moment {
         mDate = new Date();
         mTitle = "";
         mIsFavorite = false;
+        mPeople = "";
     }
 
     public UUID getId() {
@@ -61,6 +67,14 @@ public class Moment {
         mIsFavorite = favorite;
     }
 
+    public String getPeople() {
+        return mPeople;
+    }
+
+    public void setPeople(String people) {
+        mPeople = people;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,6 +88,7 @@ public class Moment {
                 .append(mId, moment.mId)
                 .append(mTitle, moment.mTitle)
                 .append(mDate, moment.mDate)
+                .append(mPeople, moment.mPeople)
                 .isEquals();
     }
 
@@ -84,6 +99,18 @@ public class Moment {
                 .append(mTitle)
                 .append(mDate)
                 .append(mIsFavorite)
+                .append(mPeople)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("mId", mId)
+                .append("mTitle", mTitle)
+                .append("mDate", mDate)
+                .append("mIsFavorite", mIsFavorite)
+                .append("mPeople", mPeople)
+                .toString();
     }
 }
