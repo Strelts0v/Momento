@@ -2,11 +2,16 @@ package com.vg.momento.controller.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +42,10 @@ public class MomentFragment extends Fragment{
 
     private Button mSaveButton;
 
+    private Button mReportButton;
+
+    private Button mPeopleButton;
+
     private MomentDao mMomentDao;
 
     private static final String ARG_MOMENT_ID = "moment_id";
@@ -46,6 +55,8 @@ public class MomentFragment extends Fragment{
     private static final String DIALOG_TIME = "DialogTime";
 
     private static final int REQUEST_CODE_DATE = 0;
+
+    private static final int REQUEST_CODE_CONTACT = 1;
 
     public static MomentFragment newInstance(UUID momentId) {
         // initialize bundle with arguments for MomentFragment
@@ -76,7 +87,6 @@ public class MomentFragment extends Fragment{
             @Override
             public void beforeTextChanged(CharSequence c, int start,
                                           int count, int after) {
-
             }
 
             @Override
@@ -87,7 +97,6 @@ public class MomentFragment extends Fragment{
 
             @Override
             public void afterTextChanged(Editable c) {
-
             }
         });
 
@@ -137,6 +146,49 @@ public class MomentFragment extends Fragment{
             }
         });
 
+        mReportButton = (Button) v.findViewById(R.id.moment_send_report_button);
+        mReportButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, getMomentReport());
+                i.putExtra(Intent.EXTRA_SUBJECT,
+                        getString(R.string.moment_report_subject));
+
+                // creating of list with available apps in the app
+                i = Intent.createChooser(i, getString(R.string.send_report));
+
+                startActivity(i);
+            }
+        });
+
+        mPeopleButton = (Button) v.findViewById(R.id.moment_choose_people_button);
+
+        final Intent pickContact = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+
+        mPeopleButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(pickContact, REQUEST_CODE_CONTACT);
+            }
+        });
+
+        if (!mMoment.getPeople().equals("")) {
+            mPeopleButton.setText(mMoment.getPeople());
+        }
+
+        // Make sure that code below will work
+        // pickContact.addCategory(Intent.CATEGORY_HOME);
+
+        // if on the device there is any contact app - disable correspond button
+        PackageManager packageManager = getActivity().getPackageManager();
+        if (packageManager.resolveActivity(pickContact,
+                PackageManager.MATCH_DEFAULT_ONLY) == null) {
+            mPeopleButton.setEnabled(false);
+        }
+
         return v;
     }
 
@@ -149,11 +201,56 @@ public class MomentFragment extends Fragment{
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mMoment.setDate(date);
             updateDate();
+        } else if (requestCode == REQUEST_CODE_CONTACT && data != null) {
+            Uri contactUri = data.getData();
+
+            // Define fields, which must be the result of request.
+            String[] queryFields = new String[] {
+                ContactsContract.Contacts.DISPLAY_NAME
+            };
+
+            // Request executing - contactUri perform function of WHERE clause
+            Cursor c = getActivity().getContentResolver()
+                  .query(contactUri, queryFields, null, null, null);
+            try {
+                 // Check receiving of results
+                if (c.getCount() == 0) {
+                   return;
+                }
+                // Extract first column - name of people
+                c.moveToFirst();
+                String suspect = c.getString(0);
+                mMoment.setPeople(suspect);
+                mPeopleButton.setText(suspect);
+            } finally {
+                c.close();
+            }
         }
     }
 
     private void updateDate() {
         mDateDisplayButton.setText(mMoment.getDate().toLocaleString());
+    }
+
+    private String getMomentReport() {
+        String favoriteString = null;
+        if (mMoment.isFavorite()) {
+            favoriteString = getString(R.string.moment_report_favorite);
+        } else {
+            favoriteString = getString(R.string.moment_report_not_favorite);
+        }
+        String dateFormat = "EEE, MMM dd";
+        String dateString = DateFormat.format(dateFormat,
+                mMoment.getDate()).toString();
+        String people = mMoment.getPeople();
+        if (people == null) {
+            people = getString(R.string.moment_report_no_people);
+        } else {
+            people = getString(R.string.moment_report_people, people);
+        }
+        String report = getString(R.string.moment_report,
+                mMoment.getTitle(), dateString, favoriteString, people);
+        return report;
     }
 }
 
