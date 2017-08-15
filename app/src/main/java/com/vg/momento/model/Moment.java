@@ -75,6 +75,11 @@ public class Moment {
         mPeople = people;
     }
 
+    public String getPhotoFilename() {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

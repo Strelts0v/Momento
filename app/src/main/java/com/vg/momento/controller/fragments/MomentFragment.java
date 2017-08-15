@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -19,16 +21,26 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
 import com.vg.momento.R;
+import com.vg.momento.dao.implementations.FileSystemPhotoMomentDao;
 import com.vg.momento.dao.implementations.SQLiteMomentDao;
 import com.vg.momento.dao.interfaces.MomentDao;
+import com.vg.momento.dao.interfaces.PhotoMomentDao;
+import com.vg.momento.dao.utils.PictureUtils;
 import com.vg.momento.model.Moment;
+
+import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
 public class MomentFragment extends Fragment{
 
     private Moment mMoment;
+
+    private File mPhotoFile;
 
     private EditText mTitleEditText;
 
@@ -46,7 +58,13 @@ public class MomentFragment extends Fragment{
 
     private Button mPeopleButton;
 
+    private ImageButton mPhotoButton;
+
+    private ImageView mPhotoView;
+
     private MomentDao mMomentDao;
+
+    private PhotoMomentDao mPhotoMomentDao;
 
     private static final String ARG_MOMENT_ID = "moment_id";
 
@@ -57,6 +75,8 @@ public class MomentFragment extends Fragment{
     private static final int REQUEST_CODE_DATE = 0;
 
     private static final int REQUEST_CODE_CONTACT = 1;
+
+    private static final int REQUEST_CODE_PHOTO = 2;
 
     public static MomentFragment newInstance(UUID momentId) {
         // initialize bundle with arguments for MomentFragment
@@ -74,6 +94,8 @@ public class MomentFragment extends Fragment{
 
         UUID id = (UUID) getArguments().getSerializable(ARG_MOMENT_ID);
         mMoment = SQLiteMomentDao.getInstance(getActivity()).getMoment(id);
+        mPhotoMomentDao = FileSystemPhotoMomentDao.getInstance(getActivity());
+        mPhotoFile = mPhotoMomentDao.getPhotoFile(mMoment);
     }
 
     @Override
@@ -189,6 +211,30 @@ public class MomentFragment extends Fragment{
             mPeopleButton.setEnabled(false);
         }
 
+        mPhotoButton = (ImageButton) v.findViewById(R.id.moment_camera);
+        mPhotoView = (ImageView) v.findViewById(R.id.moment_photo);
+
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        boolean canTakePhoto = mPhotoFile != null &&
+                captureImage.resolveActivity(packageManager) != null;
+
+        mPhotoButton.setEnabled(canTakePhoto);
+        if (canTakePhoto) {
+            Uri uri = Uri.fromFile(mPhotoFile);
+            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        }
+
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(captureImage, REQUEST_CODE_PHOTO);
+            }
+        });
+
+        mPhotoView = (ImageView) v.findViewById(R.id.moment_photo);
+        updatePhotoView();
+
         return v;
     }
 
@@ -225,6 +271,8 @@ public class MomentFragment extends Fragment{
             } finally {
                 c.close();
             }
+        } else if (requestCode == REQUEST_CODE_PHOTO) {
+            updatePhotoView();
         }
     }
 
@@ -251,6 +299,16 @@ public class MomentFragment extends Fragment{
         String report = getString(R.string.moment_report,
                 mMoment.getTitle(), dateString, favoriteString, people);
         return report;
+    }
+
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(
+                    mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
     }
 }
 
