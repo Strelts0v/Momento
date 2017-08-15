@@ -22,4 +22,10 @@
         </activity>
     </application>
 
+    <!-- allow read data from external storages for android with API lower that 18 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="18"/>
+
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="false"/>
 </manifest>
