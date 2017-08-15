@@ -15,7 +15,7 @@ import java.util.UUID;
 public class MomentDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 4;
 
     public static final String DATABASE_NAME = "momento.db";
 
@@ -29,7 +29,8 @@ public class MomentDbHelper extends SQLiteOpenHelper {
                     MomentEntry.COLUMN_NAME_ENTRY_ID + " TEXT, " +
                     MomentEntry.COLUMN_NAME_TITLE + " TEXT, " +
                     MomentEntry.COLUMN_NAME_DATE + " BIGINT, " +
-                    MomentEntry.COLUMN_NAME_IS_FAVORITE + " INTEGER " +
+                    MomentEntry.COLUMN_NAME_IS_FAVORITE + " INTEGER, " +
+                    MomentEntry.COLUMN_NAME_PEOPLE + " TEXT " +
             " )";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -90,6 +91,7 @@ public class MomentDbHelper extends SQLiteOpenHelper {
         values.put(MomentEntry.COLUMN_NAME_TITLE, moment.getTitle());
         values.put(MomentEntry.COLUMN_NAME_DATE, moment.getDate().getTime());
         values.put(MomentEntry.COLUMN_NAME_IS_FAVORITE, moment.isFavorite() ? 1 : 0);
+        values.put(MomentEntry.COLUMN_NAME_PEOPLE, moment.getPeople());
 
         // Which row to update, based on the ID
         String selection = MomentEntry.COLUMN_NAME_ENTRY_ID + " = ?";
@@ -140,6 +142,7 @@ public class MomentDbHelper extends SQLiteOpenHelper {
         values.put(MomentEntry.COLUMN_NAME_TITLE , moment.getTitle());
         values.put(MomentEntry.COLUMN_NAME_DATE, moment.getDate().getTime());
         values.put(MomentEntry.COLUMN_NAME_IS_FAVORITE, moment.isFavorite() ? 1 : 0);
+        values.put(MomentEntry.COLUMN_NAME_PEOPLE, moment.getPeople());
 
         return values;
     }
